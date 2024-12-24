@@ -1,7 +1,7 @@
 "use client"
 import { useState } from "react";
 
-const Add = () => {
+const Add = ({productId,variantId,stockNumber}:{productId: string,variantId:string,stockNumber:number}) => {
     const [quantity, setQuantity] = useState(1);
 
     //temporary
