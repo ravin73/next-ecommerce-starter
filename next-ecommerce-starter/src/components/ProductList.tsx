@@ -14,12 +14,22 @@ const ProductList = async ({
 
     const wixClient = await WixClientServer();
     
-    const res = await wixClient.products
+    const productquery = await wixClient.products
         .queryProducts()
+        .startsWith("name",searchParams?.name || "")
+        .hasSome("productType",[searchParams?.type || "physical","digital"])
+        .gt("priceData.price",searchParams?.min || 0)
+        .lt("priceData.price",searchParams?.max || 999999)
         .eq("collectionIds", categoryId)
         .limit(limit || PRODUCT_PER_PAGE)
-        .find();    
-
+        // .find();    
+        if(searchParams?.sort){
+            const [sortType,sortBy]=searchParams.sort.split("")
+            
+            if(sortType==="asc"){
+                productquery.ascending(sortBy)
+            }
+        }
     
     return (
         <div className="flex gap-x-8 gap-y-16 flex-wrap mt-12">
